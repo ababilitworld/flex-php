@@ -1,5 +1,5 @@
 {
-    "name": "ababilithub/flex-php",
+    "name": "ababilitworld/flex-php",
     "description": "A flexible, Composer-managed package to handle Raw PHP by following modern SOLID OOP PHP best practices by Ababil IT Hub.",
     "keywords": ["raw php", "php"],
     "type": "library",
@@ -39,7 +39,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/ababilithub/flex-php"
+            "url": "https://github.com/ababilitworld/flex-php"
         }
     ]
 }
