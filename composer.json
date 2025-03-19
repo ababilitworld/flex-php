@@ -1,6 +1,6 @@
 {
     "name": "ababilitworld/flex-php",
-    "description": "A flexible, Composer-managed package to handle Raw PHP by following modern SOLID OOP PHP best practices by Ababil IT Hub.",
+    "description": "A flexible, Composer-managed package to handle Raw PHP by following modern SOLID OOP best practices by Ababil IT Hub.",
     "keywords": ["raw php", "php"],
     "type": "library",
     "license": "GPL-3.0-or-later",

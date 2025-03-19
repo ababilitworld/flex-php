@@ -1,5 +1,5 @@
 <?php
-namespace Ababilitworld\FlexPhp;
+namespace Ababilithub\FlexPhp;
 
 class Bootstrap
 {

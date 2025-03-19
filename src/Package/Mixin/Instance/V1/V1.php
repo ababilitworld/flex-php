@@ -1,8 +1,8 @@
 <?php
 
-namespace Ababilithub\FlexPhp\Package\Mixin\Instance;
+namespace Ababilithub\FlexPhp\Package\Mixin\Instance\V1;
 
-trait Instance
+trait V1
 {
     /**
      * Initializes the class

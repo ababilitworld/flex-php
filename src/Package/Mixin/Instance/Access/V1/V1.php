@@ -1,8 +1,8 @@
 <?php
 
-namespace Ababilithub\FlexPhp\Package\Mixin\Instance\Access;
+namespace Ababilithub\FlexPhp\Package\Mixin\Instance\Access\V1;
 
-trait Access 
+trait V1
 {
     /**
      * Static Getter
