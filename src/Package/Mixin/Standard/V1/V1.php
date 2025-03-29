@@ -2,10 +2,10 @@
 
 namespace Ababilithub\FlexPhp\Package\Mixin\Standard\V1;
 
-use AbabilIthub\FlexPhp\Package\Mixin\Instance\V1\V1 as Instance;
-use Ababilithub\FlexPhp\Package\Mixin\Instance\Access\V1\V1 as Access;
+use AbabilIthub\FlexPhp\Package\Mixin\Singleton\Instance\Single\V1\V1 as Singleton;
+use Ababilithub\FlexPhp\Package\Mixin\Data\Access\Static\V1\V1 as AccessStaticMember;
 
 trait V1 
 {
-    use Instance, Access; 
+    use Singleton, AccessStaticMember; 
 }
