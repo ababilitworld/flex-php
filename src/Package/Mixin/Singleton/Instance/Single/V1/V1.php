@@ -17,7 +17,7 @@ trait V1
         return self::$instance;
     }
     
-    private function needsUpdate(array $config = []): bool
+    public function needsUpdate(array $config = []): bool
     {
         return empty($this->config) || $this->config !== $config;
     }
