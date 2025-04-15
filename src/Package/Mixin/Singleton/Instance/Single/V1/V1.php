@@ -5,7 +5,7 @@ namespace Ababilithub\FlexPhp\Package\Mixin\Singleton\Instance\Single\V1;
 trait V1
 { 
     public static ?self $instance = null; 
-    protected array $config = [];
+    public array $config = [];
 
     public static function getInstance(array $config = []): static
     {
