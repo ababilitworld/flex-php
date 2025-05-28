@@ -5,7 +5,7 @@ namespace Ababilithub\FlexPhp\Package\Api\v1\Facade;
 (defined( 'ABSPATH' ) && defined( 'WPINC' )) || die();
 
 use Ababilithub\{
-    FlexPhp\Package\Mixin\Standard\V1\V1 as StandardPhpMixin,
+    FlexPhp\Package\Mixin\V1\Standard\Mixin as StandardPhpMixin,
     FlexPhp\Package\Api\v1\Manager\Api as Manager,
 };
 
