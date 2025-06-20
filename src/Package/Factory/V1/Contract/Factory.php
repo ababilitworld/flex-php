@@ -1,5 +1,5 @@
 <?php 
-namespace Ababilithub\FlexWordpress\Package\Factory\V1\Contract;
+namespace Ababilithub\FlexPhp\Package\Factory\V1\Contract;
 
 (defined('ABSPATH') && defined('WPINC')) || exit();
 interface Factory

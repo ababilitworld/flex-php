@@ -1,10 +1,10 @@
 <?php 
-namespace Ababilithub\FlexWordpress\Package\Factory\V1\Base;
+namespace Ababilithub\FlexPhp\Package\Factory\V1\Base;
 
 (defined('ABSPATH') && defined('WPINC')) || exit();
 
 use Ababilithub\{
-    FlexWordpress\Package\Factory\V1\Contract\Factory as FactoryContract
+    FlexPhp\Package\Factory\V1\Contract\Factory as FactoryContract
 };
 
 abstract class Factory implements FactoryContract
