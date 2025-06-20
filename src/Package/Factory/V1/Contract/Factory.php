@@ -10,5 +10,5 @@ interface Factory
      * @param string $targetClass
      * @return mixed
      */
-    public static function get(string $targetClass): mixed;    
+    public static function get(string $targetClass): mixed;
 }
