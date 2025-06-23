@@ -1,5 +1,5 @@
 <?php
-namespace Ababilithub\FlexWordpress\Package\Form\Field\V1\Factory;
+namespace Ababilithub\FlexPhp\Package\Form\Field\V1\Factory;
 
 use Ababilithub\{
     FlexPhp\Package\Factory\V1\Base\Factory as BaseFactory,
