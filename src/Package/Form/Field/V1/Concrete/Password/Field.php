@@ -10,7 +10,7 @@ class Field extends BaseField
     protected bool $showStrengthMeter = false;
     protected int $minLength = 8;
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('password');
@@ -20,6 +20,8 @@ class Field extends BaseField
         $this->set_required($data['required'] ?? false);
         $this->showStrengthMeter = $data['showStrengthMeter'] ?? false;
         $this->minLength = $data['minLength'] ?? 8;
+
+        return $this;
     }
 
     public function render(): void

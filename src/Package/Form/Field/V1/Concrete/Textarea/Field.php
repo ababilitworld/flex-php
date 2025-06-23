@@ -11,7 +11,7 @@ class Field extends BaseField
     protected ?int $cols = null;
     protected ?int $maxLength = null;
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('textarea');
@@ -23,6 +23,8 @@ class Field extends BaseField
         $this->rows = $data['rows'] ?? 3;
         $this->cols = $data['cols'] ?? null;
         $this->maxLength = $data['maxLength'] ?? null;
+
+        return $this;
     }
 
     public function render(): void

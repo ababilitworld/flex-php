@@ -9,7 +9,7 @@ class Field extends BaseField
 {
     protected array $options = [];
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('radio');
@@ -19,6 +19,8 @@ class Field extends BaseField
         $this->set_required($data['required'] ?? false);
         $this->set_value($data['value'] ?? null);
         $this->options = $data['options'] ?? [];
+
+        return $this;
     }
 
     public function render(): void

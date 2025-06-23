@@ -14,7 +14,7 @@ class Field extends BaseField
     protected array $options = []; // For checkbox group
     protected array $selected = []; // For checkbox group
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('checkbox');
@@ -33,6 +33,8 @@ class Field extends BaseField
         // For checkbox groups
         $this->options = $data['options'] ?? [];
         $this->selected = $this->normalizeSelectedValues($data['selected'] ?? $data['value'] ?? []);
+        
+        return $this;
     }
 
     protected function normalizeSelectedValues($selected): array

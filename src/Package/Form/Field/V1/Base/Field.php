@@ -20,7 +20,7 @@ abstract class Field implements FieldContract
     {
         $this->init();
     }
-    abstract public function init(array $data = []):void;
+    abstract public function init(array $data = []): static;
     abstract public function render():void;
 
     public function set_name(string $name):void

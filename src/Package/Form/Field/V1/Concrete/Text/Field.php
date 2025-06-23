@@ -13,7 +13,7 @@ class Field extends BaseField
     protected ?int $minLength = null;
     protected ?int $maxLength = null;
     protected ?string $pattern = null;
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         // Set basic properties from data
         $this->set_name($data['name'] ?? '');
@@ -28,6 +28,8 @@ class Field extends BaseField
         $this->minLength = $data['minLength'] ?? null;
         $this->maxLength = $data['maxLength'] ?? null;
         $this->pattern = $data['pattern'] ?? null;
+
+        return $this;
     }
 
     public function render(): void 

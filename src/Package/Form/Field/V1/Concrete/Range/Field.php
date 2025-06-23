@@ -11,7 +11,7 @@ class Field extends BaseField
     protected ?int $max = 100;
     protected ?int $step = 1;
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('range');
@@ -23,6 +23,8 @@ class Field extends BaseField
         $this->min = $data['min'] ?? $this->min;
         $this->max = $data['max'] ?? $this->max;
         $this->step = $data['step'] ?? $this->step;
+
+        return $this;
     }
 
     public function render(): void

@@ -7,7 +7,7 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('email');
@@ -16,6 +16,8 @@ class Field extends BaseField
         $this->set_label($data['label'] ?? '');
         $this->set_required($data['required'] ?? false);
         $this->set_value($data['value'] ?? null);
+
+        return $this;
     }
 
     public function render(): void

@@ -10,7 +10,7 @@ class Field extends BaseField
     protected ?string $minDate = null;
     protected ?string $maxDate = null;
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('date');
@@ -21,6 +21,8 @@ class Field extends BaseField
         $this->set_value($data['value'] ?? null);
         $this->minDate = $data['minDate'] ?? null;
         $this->maxDate = $data['maxDate'] ?? null;
+
+        return $this;
     }
 
     public function render(): void

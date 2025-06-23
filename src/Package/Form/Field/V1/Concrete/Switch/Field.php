@@ -12,7 +12,7 @@ class Field extends BaseField
     protected bool $checked = false;
     protected string $size = 'medium'; // small, medium, large
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('checkbox');
@@ -27,6 +27,8 @@ class Field extends BaseField
         $this->offText = $data['offText'] ?? $this->offText;
         $this->checked = $data['checked'] ?? false;
         $this->size = $data['size'] ?? $this->size;
+
+        return $this;
     }
 
     public function render(): void

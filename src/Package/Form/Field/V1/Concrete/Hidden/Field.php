@@ -7,12 +7,14 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('hidden');
         $this->set_id($data['id'] ?? $data['name'] ?? '');
         $this->set_value($data['value'] ?? '');
+
+        return $this;
     }
 
     public function render(): void

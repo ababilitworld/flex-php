@@ -14,7 +14,7 @@ class Field extends BaseField
     protected ?string $placeholder = null;
     protected array $selected = [];
 
-    public function init(array $data = []): void
+    public function init(array $data = []): static
     {
         $this->set_name($data['name'] ?? '');
         $this->set_type('select');
@@ -32,6 +32,8 @@ class Field extends BaseField
         
         // Handle selected values
         $this->selected = $this->normalizeSelectedValues($data['selected'] ?? $data['value'] ?? []);
+
+        return $this;
     }
 
     protected function normalizeSelectedValues($selected): array
