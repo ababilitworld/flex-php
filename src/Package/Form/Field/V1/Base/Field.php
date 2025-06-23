@@ -2,7 +2,7 @@
 namespace Ababilithub\FlexPhp\Package\Form\Field\V1\Base;
 
 use Ababilithub\{
-    Ababilithub\FlexPhp\Package\Form\Field\V1\Contract\Field as FieldContract
+    FlexPhp\Package\Form\Field\V1\Contract\Field as FieldContract
 };
 
 abstract class Field implements FieldContract
