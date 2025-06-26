@@ -15,7 +15,7 @@ abstract class Field implements FieldContract
     protected string $label;
     protected bool $required;
     protected $value;
-    protected string $help_text;
+    protected ?string $help_text;
 
     public function __construct()
     {
