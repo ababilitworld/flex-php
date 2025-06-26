@@ -24,7 +24,7 @@ class Field extends BaseField
         $this->set_label($data['label'] ?? '');
         $this->set_required($data['required'] ?? false);
         $this->set_value($data['value'] ?? null);
-        $this->set_help_text($data['help_text'] ?? null);
+        $this->set_help_text($data['help_text'] ?? '');
         
         if (isset($data['multiple'])) {
             $this->multiple = (bool)$data['multiple'];
