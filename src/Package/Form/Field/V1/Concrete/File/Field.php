@@ -7,16 +7,61 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
+    /**
+     * @var bool Whether multiple files can be selected
+     */
     protected bool $multiple = false;
+    
+    /**
+     * @var array Allowed file types (extensions or MIME types)
+     */
     protected array $allowed_types = [];
-    protected int $max_size = 0; // in bytes
+    
+    /**
+     * @var int Maximum file size in bytes
+     */
+    protected int $max_size = 0;
+    
+    /**
+     * @var bool Whether to enable WordPress media library integration
+     */
     protected bool $enable_media_library = true;
-    protected string $upload_action_text;
-
+    
+    /**
+     * @var string Text for the upload button
+     */
+    protected string $upload_action_text = 'Upload';
+    
+    /**
+     * @var array Array of image URLs/IDs for preview
+     */
     protected array $previewImages = [];
 
+    /**
+     * Initialize the field with configuration
+     * 
+     * @param array $data {
+     *     Field configuration options
+     *     
+     *     @type string      $name                 Field name attribute
+     *     @type string      $id                   Field ID attribute
+     *     @type string      $class                CSS class(es) for the field
+     *     @type string      $label                Label text for the field
+     *     @type bool        $required             Whether the field is required
+     *     @type mixed       $value                Current value of the field
+     *     @type string      $help_text            Help text displayed below the field
+     *     @type bool        $multiple             Whether to allow multiple file selection
+     *     @type array       $allowed_types        Array of allowed file types
+     *     @type int         $max_size             Maximum file size in bytes
+     *     @type bool        $enable_media_library Whether to enable media library
+     *     @type string      $upload_action_text   Text for the upload button
+     *     @type array       $preview_images       Array of image URLs/IDs for preview
+     * }
+     * @return static
+     */
     public function init(array $data = []): static
     {
+        // Set base field properties
         $this->set_name($data['name'] ?? '');
         $this->set_type('file');
         $this->set_id($data['id'] ?? $data['name'] ?? '');
@@ -26,6 +71,7 @@ class Field extends BaseField
         $this->set_value($data['value'] ?? null);
         $this->set_help_text($data['help_text'] ?? '');
         
+        // Set file-specific properties
         if (isset($data['multiple'])) {
             $this->multiple = (bool)$data['multiple'];
         }
@@ -42,6 +88,10 @@ class Field extends BaseField
             $this->enable_media_library = (bool)$data['enable_media_library'];
         }
 
+        if (isset($data['upload_action_text'])) {
+            $this->upload_action_text = (string)$data['upload_action_text'];
+        }
+
         if (isset($data['preview_images'])) {
             $this->previewImages = (array)$data['preview_images'];
         }
@@ -56,12 +106,6 @@ class Field extends BaseField
         
         ?>
         <!-- Image Field -->
-         <div class="form-field">
-            <label class="form-label">
-                Deed Image
-                <span class="required">*</span>
-            </label>            
-        </div>
         <div class="form-field">
 
         <?php if (!empty($this->label)): ?>    
@@ -83,7 +127,8 @@ class Field extends BaseField
                 name="<?php echo $this->name;?>"
                 <?php echo $multiple_attr.' '.$accept_attr;?>
             >
-            <?php $this->renderPreviewItems(); ?>
+        <?php $this->renderPreviewItems(); ?>
+        </div>
         <?php
     }
 
