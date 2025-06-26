@@ -130,8 +130,9 @@ class Field extends BaseField
                 <?php echo $multiple_attr . ' ' . $accept_attr; ?>
                 <?php echo $this->required ? ' required' : ''; ?>
             >
-            
-            <?php $this->renderPreviewItems(); ?>
+            <div id="<?php echo esc_attr($this->id);?>-preview" class="document-preview-container">
+                <?php $this->renderPreviewItems(); ?>
+            </div>
         </div>
         <?php
     }
@@ -141,8 +142,6 @@ class Field extends BaseField
         if (empty($this->previewImages)) {
             return;
         }
-        
-        echo '<div id="' . esc_attr($this->id) . '-preview" class="document-preview-container">';
         
         foreach ($this->previewImages as $doc) {
             if (empty($doc)) continue;
@@ -172,8 +171,6 @@ class Field extends BaseField
             echo '</button>';
             echo '</div>';
         }
-        
-        echo '</div>';
     }
 
     public function validate(): bool

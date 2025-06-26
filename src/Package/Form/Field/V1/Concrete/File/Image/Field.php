@@ -130,8 +130,8 @@ class Field extends BaseField
                 <?php echo $multiple_attr . ' ' . $accept_attr; ?>
                 <?php echo $this->required ? ' required' : ''; ?>
             >
-            <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container"></div>
-            <?php $this->renderPreviewItems(); ?>
+            <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container">
+                <?php $this->renderPreviewItems(); ?>
             </div>
         </div>
         <?php
