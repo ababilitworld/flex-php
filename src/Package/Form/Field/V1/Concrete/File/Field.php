@@ -10,8 +10,9 @@ class Field extends BaseField
     protected bool $multiple = false;
     protected array $allowed_types = [];
     protected int $max_size = 0; // in bytes
-    protected bool $use_framework_upload = false;
-    protected string $upload_handler = '';
+    protected bool $enable_media_library = true;
+
+    protected array $previewImages = [];
 
     public function init(array $data = []): static
     {
@@ -35,12 +36,12 @@ class Field extends BaseField
             $this->max_size = (int)$data['max_size'];
         }
         
-        if (isset($data['use_framework_upload'])) {
-            $this->use_framework_upload = (bool)$data['use_framework_upload'];
+        if (isset($data['enable_media_library'])) {
+            $this->enable_media_library = (bool)$data['enable_media_library'];
         }
-        
-        if (isset($data['upload_handler'])) {
-            $this->upload_handler = (string)$data['upload_handler'];
+
+        if (isset($data['preview_images'])) {
+            $this->previewImages = (array)$data['preview_images'];
         }
         
         return $this;
@@ -51,23 +52,60 @@ class Field extends BaseField
         $multiple_attr = $this->multiple ? ' multiple' : '';
         $accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
         
-        echo '<div class="form-field file-upload-field">';
-        if (!empty($this->label)) {
-            echo '<label for="'.$this->id.'">'.$this->label.'</label>';
-        }
-        echo '<input type="'.$this->type.'" 
-                    id="'.$this->id.'" 
-                    name="'.$this->name.($this->multiple ? '[]' : '').'" 
-                    class="'.$this->class.'" 
-                    '.$multiple_attr.$accept_attr.'>';
+        ?>
+        <!-- Image Field -->
+        <div class="form-field file-upload-field">
+
+        <?php if (!empty($this->label)): ?>    
+            <label class="form-label" for="<?php echo $this->id;?>"><?php echo $this->label;?>
+                <?php if($this->required): ?>
+                    <span class="required">*</span>
+                <?php endif; ?>            
+            </label>
+        <?php endif; ?>
+
+        <?php $this->name = $this->name . ($this->multiple ? '[]' : ''); ?>
         
-        // Add framework-specific upload handler if needed
-        if ($this->use_framework_upload && !empty($this->upload_handler)) {
-            echo '<button type="button" class="framework-upload-button" data-handler="'.$this->upload_handler.'">Select Files</button>';
-        }
-        
-        echo '</div>';
+            <input 
+                type="<?php echo $this->type;?>" 
+                id="<?php echo $this->id;?>" 
+                name="<?php echo $this->name;?>"
+                class="form-control button <?php echo $this->class;?>" 
+                <?php echo $multiple_attr.' '.$accept_attr;?>
+            >
+        <?php if (!empty($this->help_text)): ?>
+            <span class="help-text"><?php echo $this->help_text;?></span>            
+        <?php endif; ?>
+        </div>
+
+        <?php $this->renderPreviewItems(); ?>
+        <?php
     }
+
+    public function renderPreviewItems(): void
+    {
+        // <label for="document-images">Document Images:</label>
+        // <input type="button" class="button" id="upload-images-button" value="Upload Images">
+        echo '<ul id="'.esc_attr($this->name ).'-preview">';
+        
+            if (is_array($this->previewImages) && count($this->previewImages) > 0) 
+            {
+                foreach ($this->previewImages as $image) 
+                {
+                    echo '<li>
+                            <img src="' . wp_get_attachment_url(esc_url($image)) . '" style="max-width: 150px;">
+                            <input type="hidden" name="'.esc_attr($this->name ).'" value="' . esc_url($image) . '">
+                            <a href="#" class="remove-image" title="Remove image">
+                                <span class="dashicons dashicons-trash"></span>
+                            </a>
+                        </li>';
+                }
+            }
+            
+        echo '</ul>';
+    }
+
+
 
     public function validate(): bool
     {

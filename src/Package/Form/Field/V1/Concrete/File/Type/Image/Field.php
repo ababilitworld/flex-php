@@ -60,6 +60,7 @@ class MultipleImageField extends FileField
                     '.$multiple_attr.$accept_attr.'>';
         echo '</div>';
         
+        
         // Preview container
         echo '<div class="image-preview-container" id="'.$this->id.'-preview">';
         

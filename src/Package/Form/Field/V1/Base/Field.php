@@ -15,6 +15,7 @@ abstract class Field implements FieldContract
     protected string $label;
     protected bool $required;
     protected $value;
+    protected string $help_text;
 
     public function __construct()
     {
@@ -62,5 +63,9 @@ abstract class Field implements FieldContract
         $this->value = $value;
     }
 
+    public function set_help_text(string $help_text):void
+    {
+        $this->help_text = $help_text;
+    }
     
 }
