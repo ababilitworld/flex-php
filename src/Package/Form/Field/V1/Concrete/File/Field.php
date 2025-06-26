@@ -11,6 +11,7 @@ class Field extends BaseField
     protected array $allowed_types = [];
     protected int $max_size = 0; // in bytes
     protected bool $enable_media_library = true;
+    protected string $upload_action_text;
 
     protected array $previewImages = [];
 
@@ -23,6 +24,7 @@ class Field extends BaseField
         $this->set_label($data['label'] ?? '');
         $this->set_required($data['required'] ?? false);
         $this->set_value($data['value'] ?? null);
+        $this->set_help_text($data['help_text'] ?? null);
         
         if (isset($data['multiple'])) {
             $this->multiple = (bool)$data['multiple'];
@@ -72,7 +74,7 @@ class Field extends BaseField
 
         <?php $this->name = $this->name . ($this->multiple ? '[]' : ''); ?>
 
-            <button class="button image-upload"><?php echo $this->button_text;?></button>
+            <button class="button image-upload"><?php echo $this->upload_action_text;?></button>
             <?php if (!empty($this->help_text)): ?>
                 <span class="help-text"><?php echo $this->help_text;?></span>            
             <?php endif; ?>
