@@ -54,7 +54,13 @@ class Field extends BaseField
         
         ?>
         <!-- Image Field -->
-        <div class="form-field file-upload-field">
+         <div class="form-field">
+            <label class="form-label">
+                Deed Image
+                <span class="required">*</span>
+            </label>            
+        </div>
+        <div class="form-field">
 
         <?php if (!empty($this->label)): ?>    
             <label class="form-label" for="<?php echo $this->id;?>"><?php echo $this->label;?>
@@ -65,44 +71,40 @@ class Field extends BaseField
         <?php endif; ?>
 
         <?php $this->name = $this->name . ($this->multiple ? '[]' : ''); ?>
-        
-            <input 
-                type="<?php echo $this->type;?>" 
+
+            <button class="button image-upload"><?php echo $this->button_text;?></button>
+            <?php if (!empty($this->help_text)): ?>
+                <span class="help-text"><?php echo $this->help_text;?></span>            
+            <?php endif; ?>
+            <input type="hidden" 
                 id="<?php echo $this->id;?>" 
                 name="<?php echo $this->name;?>"
-                class="form-control button <?php echo $this->class;?>" 
                 <?php echo $multiple_attr.' '.$accept_attr;?>
             >
-        <?php if (!empty($this->help_text)): ?>
-            <span class="help-text"><?php echo $this->help_text;?></span>            
-        <?php endif; ?>
-        </div>
-
-        <?php $this->renderPreviewItems(); ?>
+            <?php $this->renderPreviewItems(); ?>
         <?php
     }
 
     public function renderPreviewItems(): void
     {
-        // <label for="document-images">Document Images:</label>
-        // <input type="button" class="button" id="upload-images-button" value="Upload Images">
-        echo '<ul id="'.esc_attr($this->name ).'-preview">';
+        echo '<div id="' . esc_attr($this->id) . '-preview" class="image-preview-container">';
         
-            if (is_array($this->previewImages) && count($this->previewImages) > 0) 
-            {
-                foreach ($this->previewImages as $image) 
-                {
-                    echo '<li>
-                            <img src="' . wp_get_attachment_url(esc_url($image)) . '" style="max-width: 150px;">
-                            <input type="hidden" name="'.esc_attr($this->name ).'" value="' . esc_url($image) . '">
-                            <a href="#" class="remove-image" title="Remove image">
-                                <span class="dashicons dashicons-trash"></span>
-                            </a>
-                        </li>';
-                }
+        if (is_array($this->previewImages) && count($this->previewImages) > 0) {
+            foreach ($this->previewImages as $image) {
+                $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
+                $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
+                
+                echo '<div class="image-preview-item">';
+                echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
+                echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
+                echo '<a href="#" class="remove-image" title="Remove image">';
+                echo '<span class="dashicons dashicons-trash"></span>';
+                echo '</a>';
+                echo '</div>';
             }
-            
-        echo '</ul>';
+        }
+        
+        echo '</div>';
     }
 
 
