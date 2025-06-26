@@ -63,7 +63,7 @@ class Field extends BaseField
     {
         // Set base field properties
         $this->set_name($data['name'] ?? '');
-        $this->set_type('file');
+        $this->set_type('hidden');
         $this->set_id($data['id'] ?? $data['name'] ?? '');
         $this->set_class($data['class'] ?? '');
         $this->set_label($data['label'] ?? '');
@@ -71,7 +71,8 @@ class Field extends BaseField
         $this->set_value($data['value'] ?? null);
         $this->set_help_text($data['help_text'] ?? '');
         
-        // Set file-specific properties
+        $this->set_type('hidden'); // Set type to 'file'
+        
         if (isset($data['multiple'])) {
             $this->multiple = (bool)$data['multiple'];
         }
@@ -103,58 +104,62 @@ class Field extends BaseField
     {
         $multiple_attr = $this->multiple ? ' multiple' : '';
         $accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
-        
+        $field_name = $this->name . ($this->multiple ? '[]' : '');
         ?>
-        <!-- Image Field -->
         <div class="form-field">
-
-        <?php if (!empty($this->label)): ?>    
-            <label class="form-label" for="<?php echo $this->id;?>"><?php echo $this->label;?>
-                <?php if($this->required): ?>
-                    <span class="required">*</span>
-                <?php endif; ?>            
-            </label>
-        <?php endif; ?>
-
-        <?php $this->name = $this->name . ($this->multiple ? '[]' : ''); ?>
-
-            <button class="button image-upload"><?php echo $this->upload_action_text;?></button>
-            <?php if (!empty($this->help_text)): ?>
-                <span class="help-text"><?php echo $this->help_text;?></span>            
+            <?php if (!empty($this->label)): ?>    
+                <label class="form-label" for="<?php echo esc_attr($this->id); ?>">
+                    <?php echo esc_html($this->label); ?>
+                    <?php if($this->required): ?>
+                        <span class="required">*</span>
+                    <?php endif; ?>            
+                </label>
             <?php endif; ?>
+
+            <button type="button" class="button image-upload">
+                <?php echo esc_html($this->upload_action_text); ?>
+            </button>
+            
+            <?php if (!empty($this->help_text)): ?>
+                <span class="help-text"><?php echo esc_html($this->help_text); ?></span>            
+            <?php endif; ?>
+            
             <input type="hidden" 
-                id="<?php echo $this->id;?>" 
-                name="<?php echo $this->name;?>"
-                <?php echo $multiple_attr.' '.$accept_attr;?>
+                id="<?php echo esc_attr($this->id); ?>" 
+                name="<?php echo esc_attr($field_name); ?>"
+                <?php echo $multiple_attr . ' ' . $accept_attr; ?>
+                <?php echo $this->required ? ' required' : ''; ?>
             >
-        <?php $this->renderPreviewItems(); ?>
+            <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container"></div>
+            <?php $this->renderPreviewItems(); ?>
+            </div>
         </div>
         <?php
     }
 
-    public function renderPreviewItems(): void
+    protected function renderPreviewItems(): void
     {
-        echo '<div id="' . esc_attr($this->id) . '-preview" class="image-preview-container">';
-        
-        if (is_array($this->previewImages) && count($this->previewImages) > 0) {
-            foreach ($this->previewImages as $image) {
-                $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
-                $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
-                
-                echo '<div class="image-preview-item">';
-                echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
-                echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
-                echo '<a href="#" class="remove-image" title="Remove image">';
-                echo '<span class="dashicons dashicons-trash"></span>';
-                echo '</a>';
-                echo '</div>';
-            }
+        if (empty($this->previewImages)) {
+            return;
         }
         
-        echo '</div>';
+        foreach ($this->previewImages as $image) {
+            if (empty($image)) continue;
+            
+            $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
+            $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
+            
+            if (empty($image_url)) continue;
+            
+            echo '<div class="image-preview-item">';
+            echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
+            echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
+            echo '<button type="button" class="remove-image" title="Remove image">';
+            echo '<span class="dashicons dashicons-trash"></span>';
+            echo '</button>';
+            echo '</div>';
+        }
     }
-
-
 
     public function validate(): bool
     {
@@ -162,10 +167,8 @@ class Field extends BaseField
             return false;
         }
         
-        if (!empty($this->value) && !array_key_exists($this->value, $this->options)) {
-            return false;
-        }
-        
         return true;
     }
+
+
 }
