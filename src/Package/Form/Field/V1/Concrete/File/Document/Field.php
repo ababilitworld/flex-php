@@ -124,7 +124,7 @@ class Field extends BaseField
                 <span class="help-text"><?php echo esc_html($this->help_text); ?></span>            
             <?php endif; ?>
             
-            <input type="file" 
+            <input type="hidden" 
                 id="<?php echo esc_attr($this->id); ?>" 
                 name="<?php echo esc_attr($field_name); ?>"
                 <?php echo $multiple_attr . ' ' . $accept_attr; ?>
