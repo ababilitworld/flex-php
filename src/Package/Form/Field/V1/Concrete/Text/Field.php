@@ -32,25 +32,36 @@ class Field extends BaseField
         return $this;
     }
 
-    public function render(): void 
+    public function render(): void
     {
-        $requiredAttr = $this->required ? 'required' : '';
-        $value = htmlspecialchars($this->value ?? '');
-        
-        echo <<<HTML
-                <div class="form-group">
-                    <label for="{$this->id}">{$this->label}</label>
-                    <input type="{$this->type}" 
-                        id="{$this->id}" 
-                        name="{$this->name}" 
-                        class="form-control {$this->class}"
-                        value="{$value}"
-                        {$requiredAttr}
-                        minlength="{$this->minLength}"
-                        maxlength="{$this->maxLength}"
-                        pattern="{$this->pattern}">
-                </div>
-            HTML;
+        $required_attr = $this->required ? ' required' : '';
+        $value = $this->value ?? '';
+        ?>
+        <div class="form-field">
+            <?php if (!empty($this->label)): ?>    
+                <label class="form-label" for="<?php echo esc_attr($this->id); ?>">
+                    <?php echo esc_html($this->label); ?>
+                    <?php if($this->required): ?>
+                        <span class="required">*</span>
+                    <?php endif; ?>            
+                </label>
+            <?php endif; ?>
+
+            <input type="<?php echo esc_attr($this->type); ?>" 
+                id="<?php echo esc_attr($this->id); ?>" 
+                name="<?php echo esc_attr($this->name); ?>" 
+                class="form-control <?php echo esc_attr($this->class); ?>"
+                value="<?php echo esc_attr($value); ?>"
+                <?php echo $required_attr; ?>
+                minlength="<?php echo esc_attr($this->minLength); ?>"
+                maxlength="<?php echo esc_attr($this->maxLength); ?>"
+                pattern="<?php echo esc_attr($this->pattern); ?>">
+            
+            <?php if (!empty($this->help_text)): ?>
+                <span class="help-text"><?php echo esc_html($this->help_text); ?></span>            
+            <?php endif; ?>
+        </div>
+        <?php
     }
 
     public function validate(): bool
