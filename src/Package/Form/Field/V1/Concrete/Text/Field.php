@@ -48,15 +48,19 @@ class Field extends BaseField
                 </label>
             <?php endif; ?>
 
-            <input type="<?php echo esc_attr($this->type); ?>" 
+            <input 
+                type="<?php echo esc_attr($this->type); ?>" 
                 id="<?php echo esc_attr($this->id); ?>" 
                 name="<?php echo esc_attr($this->name); ?>" 
                 class="form-control <?php echo esc_attr($this->class); ?>"
                 value="<?php echo esc_attr($value); ?>"
                 <?php echo $required_attr; ?>
-                minlength="<?php echo esc_attr($this->minLength); ?>"
-                maxlength="<?php echo esc_attr($this->maxLength); ?>"
-                pattern="<?php echo esc_attr($this->pattern); ?>">
+                <?php echo $this->minLength !== null ? 'minlength="'.esc_attr($this->minLength).'"' : ''; ?>
+                <?php echo $this->maxLength !== null ? 'maxlength="'.esc_attr($this->maxLength).'"' : ''; ?>
+                <?php echo $this->pattern !== null ? 'pattern="'.esc_attr($this->pattern).'"' : ''; ?>
+                
+            >
+
             
             <?php if (!empty($this->help_text)): ?>
                 <span class="help-text"><?php echo esc_html($this->help_text); ?></span>            
