@@ -35,7 +35,7 @@ class Field extends BaseField
     /**
      * @var array Array of image URLs/IDs for preview
      */
-    protected array $previewImages = [];
+    protected array $preview_items = [];
 
     /**
      * Initialize the field with configuration
@@ -93,8 +93,8 @@ class Field extends BaseField
             $this->upload_action_text = (string)$data['upload_action_text'];
         }
 
-        if (isset($data['preview_images'])) {
-            $this->previewImages = (array)$data['preview_images'];
+        if (isset($data['preview_items'])) {
+            $this->preview_items = (array)$data['preview_items'];
         }
         
         return $this;
@@ -131,19 +131,19 @@ class Field extends BaseField
                 <?php echo $this->required ? ' required' : ''; ?>
             >
             <div id="<?php echo esc_attr($this->id);?>-preview" class="document-preview-container">
-                <?php $this->renderPreviewItems(); ?>
+                <?php $this->render_preview_items(); ?>
             </div>
         </div>
         <?php
     }
 
-    protected function renderPreviewItems(): void
+    protected function render_preview_items(): void
     {
-        if (empty($this->previewImages)) {
+        if (empty($this->preview_items)) {
             return;
         }
         
-        foreach ($this->previewImages as $doc) {
+        foreach ($this->preview_items as $doc) {
             if (empty($doc)) continue;
             
             $doc_url = is_numeric($doc) ? wp_get_attachment_url($doc) : esc_url($doc);

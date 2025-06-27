@@ -35,7 +35,7 @@ class Field extends BaseField
     /**
      * @var array Array of image URLs/IDs for preview
      */
-    protected array $previewImages = [];
+    protected array $preview_items = [];
 
     /**
      * Initialize the field with configuration
@@ -55,7 +55,7 @@ class Field extends BaseField
      *     @type int         $max_size             Maximum file size in bytes
      *     @type bool        $enable_media_library Whether to enable media library
      *     @type string      $upload_action_text   Text for the upload button
-     *     @type array       $preview_images       Array of image URLs/IDs for preview
+     *     @type array       $preview_items       Array of image URLs/IDs for preview
      * }
      * @return static
      */
@@ -93,8 +93,8 @@ class Field extends BaseField
             $this->upload_action_text = (string)$data['upload_action_text'];
         }
 
-        if (isset($data['preview_images'])) {
-            $this->previewImages = (array)$data['preview_images'];
+        if (isset($data['preview_items'])) {
+            $this->preview_items = (array)$data['preview_items'];
         }
         
         return $this;
@@ -131,28 +131,29 @@ class Field extends BaseField
                 <?php echo $this->required ? ' required' : ''; ?>
             >
             <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container">
-                <?php $this->renderPreviewItems(); ?>
+                <?php $this->render_preview_items(); ?>
             </div>
         </div>
         <?php
     }
 
-    protected function renderPreviewItems(): void
+    protected function render_preview_items(): void
     {
-        if (empty($this->previewImages)) {
+        if (empty($this->preview_items)) {
             return;
         }
         
-        foreach ($this->previewImages as $image) {
+        foreach ($this->preview_items as $image) {
             if (empty($image)) continue;
             
             $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
             $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
-            
+            $image_title = is_numeric($image) ? get_the_title($image) : basename($image_url);
+
             if (empty($image_url)) continue;
             
             echo '<div class="image-preview-item">';
-            echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
+            echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($image_title) . '" style="max-width: 150px;">';
             echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
             echo '<button type="button" class="remove-image" title="Remove image">';
             echo '<span class="dashicons dashicons-trash"></span>';
