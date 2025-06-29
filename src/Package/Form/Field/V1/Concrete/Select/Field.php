@@ -103,7 +103,7 @@ class Field extends BaseField
                     if (select) {
                         $(select).select2({
                             placeholder: '{$this->placeholder}',
-                            allowClear: {$this->allowClear ? 'true' : 'false'},
+                            allowClear: {<?php echo $this->allowClear ? 'true' : 'false'?>},
                             width: '100%'
                         });
                     }
