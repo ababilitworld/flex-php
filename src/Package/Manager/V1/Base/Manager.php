@@ -8,6 +8,10 @@ use Ababilithub\{
 abstract class Manager implements ManagerContract
 {
     protected array $items = [];
+    public function __construct()
+    {
+        $this->init();
+    }
 
     public function set_items(array $items = []): static
     {
