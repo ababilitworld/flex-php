@@ -7,8 +7,9 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
-    protected $field_name;
+    public $this->field_name;
 
+    public $this->accept_attri
     /**
      * @var bool Whether multiple files can be selected
      */
@@ -104,9 +105,9 @@ class Field extends BaseField
 
     public function render(): void
     {
-        $multiple_attr = $this->multiple ? ' multiple' : '';
-        $accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
-        $field_name = $this->name . ($this->multiple ? '[]' : '');
+        $this->multiple_attr = $this->multiple ? ' multiple' : '';
+        $this->accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
+        $this->field_name = $this->name . ($this->multiple ? '[]' : '');
         ?>
         <div class="form-field">
             <?php if (!empty($this->label)): ?>    
@@ -128,8 +129,8 @@ class Field extends BaseField
             
             <input type="hidden" 
                 id="<?php echo esc_attr($this->id); ?>" 
-                name="<?php echo esc_attr($field_name); ?>"
-                <?php echo $multiple_attr . ' ' . $accept_attr; ?>
+                name="<?php echo esc_attr($this->field_name); ?>"
+                <?php echo $this->multiple_attr . ' ' . $this->accept_attr; ?>
                 <?php echo $this->required ? ' required' : ''; ?>
             >
             <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container"></div>
@@ -150,12 +151,12 @@ class Field extends BaseField
             
             $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
             $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
-            $field_name = $this->name . ($this->multiple ? '[]' : '');
+            $this->field_name = $this->name . ($this->multiple ? '[]' : '');
             if (empty($image_url)) continue;
             
             echo '<div class="image-preview-item">';
             echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
-            echo '<input type="hidden" name="' . esc_attr($field_name). '" value="' . esc_attr($image_id) . '">';
+            echo '<input type="hidden" name="' . esc_attr($this->field_name). '" value="' . esc_attr($image_id) . '">';
             echo '<button type="button" class="remove-image" title="Remove image">';
             echo '<span class="dashicons dashicons-trash"></span>';
             echo '</button>';
