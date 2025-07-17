@@ -153,7 +153,7 @@ class Field extends BaseField
             
             echo '<div class="image-preview-item">';
             echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
-            echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
+            echo '<input type="hidden" name="' . esc_attr($this->name .($this->multiple ? '[]' : '')). '" value="' . esc_attr($image_id) . '">';
             echo '<button type="button" class="remove-image" title="Remove image">';
             echo '<span class="dashicons dashicons-trash"></span>';
             echo '</button>';
