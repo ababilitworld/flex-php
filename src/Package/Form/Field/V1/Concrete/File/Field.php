@@ -7,9 +7,6 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
-    public $this->field_name;
-
-    public $this->accept_attri
     /**
      * @var bool Whether multiple files can be selected
      */

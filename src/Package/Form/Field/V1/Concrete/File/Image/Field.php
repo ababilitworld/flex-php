@@ -7,6 +7,9 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
+    public $multiple_attr;
+    public $accept_attr;
+    public $field_name;
     /**
      * @var bool Whether multiple files can be selected
      */
@@ -102,9 +105,9 @@ class Field extends BaseField
 
     public function render(): void
     {
-        $multiple_attr = $this->multiple ? ' multiple' : '';
-        $accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
-        $field_name = $this->name . ($this->multiple ? '[]' : '');
+        $this->multiple_attr = $this->multiple ? ' multiple' : '';
+        $this->accept_attr = !empty($this->allowed_types) ? ' accept="'.implode(',', $this->allowed_types).'"' : '';
+        $this->field_name = $this->name . ($this->multiple ? '[]' : '');
         ?>
         <div class="form-field">
             <?php if (!empty($this->label)): ?>    
@@ -126,8 +129,8 @@ class Field extends BaseField
             
             <input type="hidden" 
                 id="<?php echo esc_attr($this->id); ?>" 
-                name="<?php echo esc_attr($field_name); ?>"
-                <?php echo $multiple_attr . ' ' . $accept_attr; ?>
+                name="<?php echo esc_attr($this->field_name); ?>"
+                <?php echo $this->multiple_attr . ' ' . $this->accept_attr; ?>
                 <?php echo $this->required ? ' required' : ''; ?>
             >
             <div id="<?php echo esc_attr($this->id);?>-preview" class="image-preview-container">
@@ -139,11 +142,13 @@ class Field extends BaseField
 
     protected function render_preview_items(): void
     {
-        if (empty($this->preview_items)) {
+        if (empty($this->preview_items)) 
+        {
             return;
         }
         
-        foreach ($this->preview_items as $image) {
+        foreach ($this->preview_items as $image) 
+        {
             if (empty($image)) continue;
             
             $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
@@ -151,20 +156,30 @@ class Field extends BaseField
             $image_title = is_numeric($image) ? get_the_title($image) : basename($image_url);
 
             if (empty($image_url)) continue;
+            ?>
             
-            echo '<div class="image-preview-item">';
-            echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($image_title) . '" style="max-width: 150px;">';
-            echo '<input type="hidden" name="' . esc_attr($this->name) . '[]" value="' . esc_attr($image_id) . '">';
-            echo '<button type="button" class="remove-image" title="Remove image">';
-            echo '<span class="dashicons dashicons-trash"></span>';
-            echo '</button>';
-            echo '</div>';
+            <div class="image-preview-item">
+            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_title); ?>" style="max-width: 150px;">
+            <input type="hidden" name="<?php echo esc_attr($this->name); ?>" value="<?php echo  esc_attr($image_id); ?>">
+            <input type="hidden" 
+                id="<?php echo esc_attr($this->id); ?>" 
+                name="<?php echo esc_attr($this->field_name); ?>"
+                value="<?php echo esc_attr($image_id); ?>"
+                <?php echo $this->multiple_attr . ' ' . $this->accept_attr; ?>
+                <?php echo $this->required ? ' required' : ''; ?>
+            >
+            <button type="button" class="remove-image" title="Remove image">
+            <span class="dashicons dashicons-trash"></span>
+            </button>
+            </div>
+            <?Php
         }
     }
 
     public function validate(): bool
     {
-        if ($this->required && empty($this->value)) {
+        if ($this->required && empty($this->value)) 
+        {
             return false;
         }
         
