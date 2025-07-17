@@ -142,25 +142,36 @@ class Field extends BaseField
 
     protected function renderPreviewItems(): void
     {
-        if (empty($this->previewImages)) {
+        if (empty($this->previewImages)) 
+        {
             return;
         }
         
-        foreach ($this->previewImages as $image) {
+        foreach ($this->previewImages as $image) 
+        {
             if (empty($image)) continue;
             
             $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
             $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
             $this->field_name = $this->name . ($this->multiple ? '[]' : '');
             if (empty($image_url)) continue;
+            ?>
+            <div class="image-preview-item">
+                <img src="<?php echo esc_url($image_url);?>" style="max-width: 150px;">
+            <!-- <input type="hidden" name="' . esc_attr($this->field_name). '" value="' . esc_attr($image_id) . '">'; -->
             
-            echo '<div class="image-preview-item">';
-            echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
-            echo '<input type="hidden" name="' . esc_attr($this->field_name). '" value="' . esc_attr($image_id) . '">';
-            echo '<button type="button" class="remove-image" title="Remove image">';
-            echo '<span class="dashicons dashicons-trash"></span>';
-            echo '</button>';
-            echo '</div>';
+                <input type="hidden" 
+                    id="<?php echo esc_attr($this->id); ?>" 
+                    name="<?php echo esc_attr($this->field_name); ?>"
+                    value="<?php echo esc_attr($image_id);?>"
+                    <?php echo $this->multiple_attr . ' ' . $this->accept_attr; ?>
+                    <?php echo $this->required ? ' required' : ''; ?>
+                >
+                <button type="button" class="remove-image" title="Remove image">
+                    <span class="dashicons dashicons-trash"></span>
+                </button>
+            </div>
+            <?php
         }
     }
 
