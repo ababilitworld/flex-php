@@ -7,6 +7,8 @@ use Ababilithub\{
 
 class Field extends BaseField
 {
+    protected $field_name;
+
     /**
      * @var bool Whether multiple files can be selected
      */
@@ -148,12 +150,12 @@ class Field extends BaseField
             
             $image_url = is_numeric($image) ? wp_get_attachment_url($image) : esc_url($image);
             $image_id = is_numeric($image) ? $image : attachment_url_to_postid($image_url);
-            
+            $field_name = $this->name . ($this->multiple ? '[]' : '');
             if (empty($image_url)) continue;
             
             echo '<div class="image-preview-item">';
             echo '<img src="' . esc_url($image_url) . '" style="max-width: 150px;">';
-            echo '<input type="hidden" name="' . esc_attr($this->name .($this->multiple ? '[]' : '')). '" value="' . esc_attr($image_id) . '">';
+            echo '<input type="hidden" name="' . esc_attr($field_name). '" value="' . esc_attr($image_id) . '">';
             echo '<button type="button" class="remove-image" title="Remove image">';
             echo '<span class="dashicons dashicons-trash"></span>';
             echo '</button>';
