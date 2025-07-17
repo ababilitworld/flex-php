@@ -156,22 +156,14 @@ class Field extends BaseField
             $image_title = is_numeric($image) ? get_the_title($image) : basename($image_url);
 
             if (empty($image_url)) continue;
-            ?>
-            
-            <div class="image-preview-item">
-            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_title); ?>" style="max-width: 150px;">
-            <input type="hidden" name="<?php echo esc_attr($this->name); ?>" value="<?php echo  esc_attr($image_id); ?>">
-            <input type="hidden" 
-                id="<?php echo esc_attr($this->id); ?>" 
-                name="<?php echo esc_attr($this->field_name); ?>"
-                value="<?php echo esc_attr($image_id); ?>"
-                <?php echo $this->multiple_attr . ' ' . $this->accept_attr; ?>
-                <?php echo $this->required ? ' required' : ''; ?>
-            >
-            <button type="button" class="remove-image" title="Remove image">
-            <span class="dashicons dashicons-trash"></span>
-            </button>
-            </div>
+            ?>            
+                <div class="image-preview-item">
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_title); ?>" style="max-width: 150px;">
+                    <input type="hidden" name="<?php echo esc_attr($this->field_name); ?>" value="<?php echo  esc_attr($image_id); ?>">
+                    <button type="button" class="remove-image" title="Remove image">
+                        <span class="dashicons dashicons-trash"></span>
+                    </button>
+                </div>
             <?Php
         }
     }
