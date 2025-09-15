@@ -9,7 +9,7 @@ use Ababilithub\{
 use WP_REST_Response;
 use WP_Error;
 
-class Repository extends BaseRepository implements RepositoryContract
+class Repository extends BaseRepository
 {
     protected function validateConfig(): void
     {

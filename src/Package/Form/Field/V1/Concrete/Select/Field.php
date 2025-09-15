@@ -3,6 +3,7 @@ namespace Ababilithub\FlexPhp\Package\Form\Field\V1\Concrete\Select;
 
 use Ababilithub\{
     FlexPhp\Package\Form\Field\V1\Base\Field as BaseField,
+    FlexPhp\Package\Form\Field\V1\Contract\Field as FieldContract,
 };
 
 class Field extends BaseField
@@ -16,21 +17,21 @@ class Field extends BaseField
 
     public function init(array $data = []): static
     {
+        // Set basic properties from data
         $this->set_name($data['name'] ?? '');
         $this->set_type('select');
         $this->set_id($data['id'] ?? $data['name'] ?? '');
         $this->set_class($data['class'] ?? '');
         $this->set_label($data['label'] ?? '');
         $this->set_required($data['required'] ?? false);
+        $this->set_help_text($data['help_text'] ?? '');
         
-        // Select-specific properties
+        // Set select-specific properties
         $this->options = $data['options'] ?? [];
         $this->multiple = $data['multiple'] ?? false;
         $this->searchable = $data['searchable'] ?? false;
         $this->allowClear = $data['allowClear'] ?? false;
         $this->placeholder = $data['placeholder'] ?? ($this->required ? null : '-- Select --');
-        
-        // Handle selected values
         $this->selected = $this->normalizeSelectedValues($data['selected'] ?? $data['value'] ?? []);
 
         return $this;
@@ -53,63 +54,72 @@ class Field extends BaseField
 
     public function render(): void
     {
-        $requiredAttr = $this->required ? 'required' : '';
-        $multipleAttr = $this->multiple ? 'multiple' : '';
-        $nameAttr = $this->multiple ? "name=\"{$this->name}[]\"" : "name=\"{$this->name}\"";
+        $required_attr = $this->required ? ' required' : '';
+        $multiple_attr = $this->multiple ? ' multiple' : '';
+        $name_attr = $this->multiple ? 'name="'.esc_attr($this->name).'[]"' : 'name="'.esc_attr($this->name).'"';
+        $select2_class = ($this->searchable || $this->multiple) ? ' select2-enabled' : '';
+        ?>
         
-        $searchClass = $this->searchable ? 'searchable-select' : '';
-        $select2Class = $this->searchable || $this->multiple ? 'select2-enabled' : '';
-        
-        echo <<<HTML
-            <div class="form-group select-container">
-                <label for="{$this->id}">{$this->label}</label>
-                <select id="{$this->id}" 
-                        {$nameAttr}
-                        class="form-control {$this->class} {$searchClass} {$select2Class}"
-                        {$multipleAttr}
-                        {$requiredAttr}
-                        data-placeholder="{$this->placeholder}"
-                        data-allow-clear="{$this->allowClear}">
-        HTML;
+        <div class="form-field">
+            <?php if (!empty($this->label)): ?>
+                <label class="form-label" for="<?php echo esc_attr($this->id); ?>">
+                    <?php echo esc_html($this->label); ?>
+                    <?php if($this->required): ?>
+                        <span class="required">*</span>
+                    <?php endif; ?>
+                </label>
+            <?php endif; ?>
 
-        if ($this->placeholder && !$this->multiple) {
-            echo '<option value="">' . htmlspecialchars($this->placeholder) . '</option>';
-        }
+            <select 
+                id="<?php echo esc_attr($this->id); ?>"
+                <?php echo $name_attr; ?>
+                class="form-control <?php echo esc_attr($this->class.$select2_class); ?>"
+                <?php echo $multiple_attr; ?>
+                <?php echo $required_attr; ?>
+                data-placeholder="<?php echo esc_attr($this->placeholder ?? ''); ?>"
+                data-allow-clear="<?php echo $this->allowClear ? 'true' : 'false'; ?>"
+            >
+                <?php if ($this->placeholder && !$this->multiple): ?>
+                    <option value=""><?php echo esc_html($this->placeholder); ?></option>
+                <?php endif; ?>
 
-        foreach ($this->options as $value => $label) {
-            $selectedAttr = in_array($value, $this->selected) ? 'selected' : '';
-            echo '<option value="' . htmlspecialchars($value) . '" ' . $selectedAttr . '>' 
-            . htmlspecialchars($label) . '</option>';
-        }
+                <?php foreach ($this->options as $value => $label): ?>
+                    <option 
+                        value="<?php echo esc_attr($value); ?>"
+                        <?php echo in_array($value, $this->selected) ? ' selected' : ''; ?>
+                    >
+                        <?php echo esc_html($label); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        echo <<<HTML
-                </select>
-            </div>
-        HTML;
+            <?php if (!empty($this->help_text)): ?>
+                <span class="help-text"><?php echo esc_html($this->help_text); ?></span>
+            <?php endif; ?>
 
-        // Add JavaScript initialization if needed
-        if ($this->searchable || $this->multiple) 
-        {
-            $this->renderSelect2Init();
-        }
+            <?php if ($this->searchable || $this->multiple): ?>
+                <?php $this->renderSelect2Init(); ?>
+            <?php endif; ?>
+        </div>
+        <?php
     }
 
     protected function renderSelect2Init(): void
     {
-        echo <<<HTML
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const select = document.getElementById('{$this->id}');
-                    if (select) {
-                        $(select).select2({
-                            placeholder: '{$this->placeholder}',
-                            allowClear: {<?php echo $this->allowClear ? 'true' : 'false'?>},
-                            width: '100%'
-                        });
-                    }
-                });
-            </script>
-        HTML;
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.getElementById('<?php echo esc_js($this->id); ?>');
+                if (select) {
+                    $(select).select2({
+                        placeholder: '<?php echo esc_js($this->placeholder ?? ''); ?>',
+                        allowClear: <?php echo $this->allowClear ? 'true' : 'false'; ?>,
+                        width: '100%'
+                    });
+                }
+            });
+        </script>
+        <?php
     }
 
     public function validate(): bool
@@ -118,7 +128,6 @@ class Field extends BaseField
             return false;
         }
         
-        // Validate all selected values exist in options
         foreach ($this->selected as $value) {
             if (!array_key_exists($value, $this->options)) {
                 return false;

@@ -6,7 +6,7 @@ use Ababilithub\{
     FlexPhp\Package\Repository\V1\Contract\Repository as RepositoryContract,
 };
 
-class Repository extends BaseRepository implements RepositoryContract
+class Repository extends BaseRepository
 {
     protected function validateConfig(): void
     {

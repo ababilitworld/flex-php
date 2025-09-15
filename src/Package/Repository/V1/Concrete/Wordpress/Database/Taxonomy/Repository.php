@@ -8,7 +8,7 @@ use Ababilithub\{
 
 use WP_Term;
 
-class Repository extends BaseRepository implements RepositoryContract
+class Repository extends BaseRepository
 {
     protected function validateConfig(): void
     {

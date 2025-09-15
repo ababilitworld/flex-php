@@ -29,6 +29,11 @@ abstract class Repository implements RepositoryContract
     abstract public function update($id, array $data);
     abstract public function delete($id);
 
+    public function resolveConnection(): void
+    {
+
+    }
+
     abstract protected function validateConfig(): void;
 
     protected function validateData(array $data, array $rules): bool

@@ -17,14 +17,20 @@ class Utility
         }
         
         // Multiple key search
-        return array_filter($haystack, function($item) use ($needleArray, $keys) {
-            foreach ($keys as $key) {
-                if (!isset($item[$key]) || $item[$key] !== $needleArray[$key]) {
-                    return false;
+        return array_filter( 
+         $haystack, 
+      function($item) use ($needleArray, $keys) 
+                {
+                    foreach ($keys as $key) 
+                    {
+                        if (!isset($item[$key]) || $item[$key] !== $needleArray[$key]) 
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
                 }
-            }
-            return true;
-        });
+        );
 
     }
 }

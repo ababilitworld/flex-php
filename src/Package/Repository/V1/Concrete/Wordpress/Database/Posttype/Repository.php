@@ -1,5 +1,5 @@
 <?php
-namespace Ababilithub\FlexPhp\Package\Repository\V1\Concrete\Wordpress\Database\Post;
+namespace Ababilithub\FlexPhp\Package\Repository\V1\Concrete\Wordpress\Database\Posttype;
 
 use Ababilithub\{
     FlexPhp\Package\Repository\V1\Base\Repository as BaseRepository,
@@ -8,7 +8,7 @@ use Ababilithub\{
 
 use WP_Post;
 
-class Repository extends BaseRepository implements RepositoryContract
+class Repository extends BaseRepository
 {
     protected function validateConfig(): void
     {

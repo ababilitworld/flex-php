@@ -9,6 +9,7 @@ class Field extends BaseField
 {
     public function init(array $data = []): static
     {
+        // Set basic properties from data
         $this->set_name($data['name'] ?? '');
         $this->set_type('color');
         $this->set_id($data['id'] ?? $data['name'] ?? '');
@@ -16,34 +17,56 @@ class Field extends BaseField
         $this->set_label($data['label'] ?? '');
         $this->set_required($data['required'] ?? false);
         $this->set_value($data['value'] ?? '#000000');
+        $this->set_help_text($data['help_text'] ?? '');
 
         return $this;
     }
 
     public function render(): void
     {
-        $requiredAttr = $this->required ? 'required' : '';
-        $value = htmlspecialchars($this->value ?? '#000000');
-        
-        echo <<<HTML
-            <div class="form-group">
-                <label for="{$this->id}">{$this->label}</label>
-                <input type="color" 
-                    id="{$this->id}" 
-                    name="{$this->name}" 
-                    class="form-control {$this->class}"
-                    value="{$value}"
-                    {$requiredAttr}>
-            </div>
-        HTML;
+        $required_attr = $this->required ? ' required' : '';
+        $value = $this->value ?? '#000000';
+        ?>
+        <div class="form-field">
+            <?php if (!empty($this->label)): ?>    
+                <label class="form-label" for="<?php echo esc_attr($this->id); ?>">
+                    <?php echo esc_html($this->label); ?>
+                    <?php if($this->required): ?>
+                        <span class="required">*</span>
+                    <?php endif; ?>            
+                </label>
+            <?php endif; ?>
+
+            <input 
+                type="<?php echo esc_attr($this->type); ?>" 
+                id="<?php echo esc_attr($this->id); ?>" 
+                name="<?php echo esc_attr($this->name); ?>" 
+                class="form-control <?php echo esc_attr($this->class); ?>"
+                value="<?php echo esc_attr($value); ?>"
+                <?php echo $required_attr; ?>
+            >
+
+            <?php if (!empty($this->help_text)): ?>
+                <span class="help-text"><?php echo esc_html($this->help_text); ?></span>            
+            <?php endif; ?>
+        </div>
+        <?php
     }
 
     public function validate(): bool
     {
-        if ($this->required && empty($this->value)) {
+        $value = $this->value;
+        
+        if ($this->required && empty($value)) {
             return false;
         }
         
-        return empty($this->value) || preg_match('/^#[0-9a-fA-F]{6}$/', $this->value);
+        // Allow empty values if not required
+        if (empty($value)) {
+            return true;
+        }
+        
+        // Validate hex color format (3 or 6 digits with #)
+        return preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $value);
     }
 }
